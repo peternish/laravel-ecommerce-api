@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function incrementTotalOrders()
+    {
+        $this->update(['total_orders' => ++$this->total_orders]);
+    }
 }

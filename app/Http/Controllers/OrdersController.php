@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,9 +35,11 @@ class OrdersController extends Controller
             }
             else $user = auth()->user();
 
-            $data = $request->only(['value', 'cost']);
-            $data['user_id'] = $user->id;
-            $order = Order::create($data);
+            $orderValue = $this->calculateOrderValue($request);
+            $order = Order::create([
+                'user_id' => $user->id,
+                'value' => $orderValue
+            ]);
 
             $result = [
                 'success' => true,
@@ -68,15 +71,31 @@ class OrdersController extends Controller
      *
      * @return array
      */
-    private function getRules()
+    private function getRules(): array
     {
         $rules = [
-            'value' => 'required|integer'
+            'products' => 'required|array',
+            'products.*' => 'required|string|exists:products,id'
         ];
 
         if (!auth()->check())
             $rules['email'] = 'required|email|unique:users,email';
 
         return $rules;
+    }
+
+    /**
+     * Validation rules
+     *
+     * @return integer
+     */
+    private function calculateOrderValue(Request $request): int
+    {
+        $value = 0;
+        foreach ($request->products as $productId){
+            $product = Product::FindOrFail($productId);
+            $value += $product->price;
+        }
+        return $value;
     }
 }

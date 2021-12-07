@@ -17,7 +17,7 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price' => round($this->cost/100, 2),
+            'price' => round($this->price/100, 2),
             'created_at' => $this->created_at->format(config('app.date_format')),
             'updated_at' => $this->updated_at->format(config('app.date_format'))
         ];
