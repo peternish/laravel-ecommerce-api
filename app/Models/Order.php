@@ -19,4 +19,14 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeOpen($query)
+    {
+        $query->where('status', 0);
+    }
+
+    public function scopeClosed($query)
+    {
+        $query->where('status', 1);
+    }
 }
