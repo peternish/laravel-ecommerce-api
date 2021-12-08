@@ -19,7 +19,9 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'email' => 'root@localhost',
             'password' => Hash::make('password'),
-            'is_admin' => true
+            'is_admin' => true,
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
 
         User::factory(10)->create();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -16,7 +17,8 @@ class UserResource extends JsonResource
     {
         return [
             'email' => $this->email,
-            'orders' => OrderResource::collection($this->orders()),
+            'orders' => OrderResource::collection($this->orders()->get()),
+            'total_orders' => $this->total_orders,
             'created_at' => $this->created_at->format(config('app.date_format')),
             'updated_at' => $this->updated_at->format(config('app.date_format'))
         ];

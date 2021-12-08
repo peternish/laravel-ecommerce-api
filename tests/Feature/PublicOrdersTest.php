@@ -38,7 +38,7 @@ class PublicOrdersTest extends TestCase
                 ],
                 'user' => [
                     'email' => $email
-                ]
+                ],
             ]
         ]);
 

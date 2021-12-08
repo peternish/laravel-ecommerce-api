@@ -115,8 +115,9 @@ return [
         ],
 
         'model' => [
-            'driver' => 'monolog',
+            'driver' => 'single',
             'path' => storage_path('logs/model.log'),
+            'level' => env('LOG_LEVEL', 'debug')
         ]
     ],
 

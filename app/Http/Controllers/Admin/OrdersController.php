@@ -7,7 +7,6 @@ use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Models\Product;
 use App\Traits\CalculateOrderValue;
 
 class OrdersController extends Controller
@@ -43,7 +42,7 @@ class OrdersController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $order
+            'data' => new OrderResource($order)
         ]);
     }
 
@@ -70,7 +69,8 @@ class OrdersController extends Controller
         $order->update($request->validated());
 
         return response()->json([
-            'success' => true
+            'success' => true,
+            'data' => new OrderResource($order)
         ]);
     }
 

@@ -31,7 +31,7 @@ class ProductsController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $product
+            'data' => new ProductResource($product)
         ]);
     }
 
@@ -58,7 +58,8 @@ class ProductsController extends Controller
         $product->update($request->validated());
 
         return response()->json([
-            'success' => true
+            'success' => true,
+            'data' => new ProductResource($product)
         ]);
     }
 

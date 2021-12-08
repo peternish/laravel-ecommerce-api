@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\UserResource;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\User;
 use App\Traits\CalculateOrderValue;
 use Exception;
@@ -37,8 +37,12 @@ class OrdersController extends Controller
                     'email' => $request->email,
                     'password' => $hashed
                 ]);
+                $isNewUser = true;
             }
-            else $user = auth()->user();
+            else {
+                $user = auth()->user();
+                $isNewUser = false;
+            }
 
             $orderValue = $this->calculateOrderValue($request->products);
             $order = Order::create([
@@ -53,11 +57,10 @@ class OrdersController extends Controller
                 ]
             ];
 
-            if (!auth()->check()){
-                $result['data']['user'] = [
-                    'email' => $user->email,
-                    'password' => $password
-                ];
+            if ($isNewUser){
+                $result['data']['user'] = $user;
+                $result['data']['password'] = $password;
+                $result['data']['token'] = $user->createToken('access_token')->plainTextToken;
             }
             DB::commit();
             return response()->json($result);

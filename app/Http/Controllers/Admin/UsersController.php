@@ -37,7 +37,7 @@ class UsersController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $user
+            'data' => new UserResource($user)
         ]);
     }
 
@@ -63,7 +63,7 @@ class UsersController extends Controller
     {
         $this->validate($request, [
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['required', 'password', 'confirmed']
+            'password' => ['required', 'string', 'confirmed']
         ]);
 
         $user->update([
@@ -72,7 +72,8 @@ class UsersController extends Controller
         ]);
 
         return response()->json([
-            'success' => true
+            'success' => true,
+            'data' => new UserResource($user)
         ]);
     }
 

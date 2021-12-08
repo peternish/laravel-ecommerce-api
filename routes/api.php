@@ -14,19 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/register', 'AuthController@register');
+Route::post('/login', 'AuthController@login');
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout', 'AuthController@logout');
+});
+
 Route::group([
     'prefix' => 'admin',
-    'middleware' => 'auth:sanctum',
+    'middleware' => ['auth:sanctum', 'is_admin'],
     'namespace' => 'Admin',
     'as' => 'admin.'
 ], function () {
     Route::apiResource('/users', 'UsersController');
     Route::apiResource('/products', 'ProductsController');
     Route::apiResource('/orders', 'OrdersController');
-
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
 });
 
 Route::prefix('public')->group(function () {
