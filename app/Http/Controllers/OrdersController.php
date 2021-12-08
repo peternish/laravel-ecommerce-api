@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class OrdersController extends Controller
@@ -28,14 +29,15 @@ class OrdersController extends Controller
         try{
             if (!auth()->check()){
                 $password = Str::random(8);
+                $hashed = Hash::make($password);
                 $user = User::create([
                     'email' => $request->email,
-                    'password' => $password
+                    'password' => $hashed
                 ]);
             }
             else $user = auth()->user();
 
-            $orderValue = $this->calculateOrderValue($request);
+            $orderValue = $this->calculateOrderValue($request->products);
             $order = Order::create([
                 'user_id' => $user->id,
                 'value' => $orderValue
@@ -67,7 +69,7 @@ class OrdersController extends Controller
     }
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @return array
      */
@@ -75,7 +77,7 @@ class OrdersController extends Controller
     {
         $rules = [
             'products' => 'required|array',
-            'products.*' => 'required|string|exists:products,id'
+            'products.*' => 'required|integer|exists:products,id'
         ];
 
         if (!auth()->check())
@@ -85,14 +87,14 @@ class OrdersController extends Controller
     }
 
     /**
-     * Validation rules
+     * Calculate order value.
      *
      * @return integer
      */
-    private function calculateOrderValue(Request $request): int
+    private function calculateOrderValue(array $products): int
     {
         $value = 0;
-        foreach ($request->products as $productId){
+        foreach ($products as $productId){
             $product = Product::FindOrFail($productId);
             $value += $product->price;
         }

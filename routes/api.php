@@ -20,14 +20,16 @@ Route::group([
     'namespace' => 'Admin',
     'as' => 'admin.'
 ], function () {
+    Route::apiResource('/users', 'UsersController');
+    Route::apiResource('/products', 'ProductsController');
+    Route::apiResource('/orders', 'OrdersController');
 
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
 
 Route::prefix('public')->group(function () {
     Route::apiResource('/products', 'ProductsController')->only(['index', 'show']);
     Route::post('/orders', 'OrdersController@store');
-});
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
 });
