@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\Helper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -18,7 +19,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'status' => $this->status == 0 ? 'open' : 'closed',
             'user_id' => $this->user_id,
-            'value' => round($this->value/100, 2),
+            'value' => Helper::convertToPLN($this->value),
             'created_at' => $this->created_at->format(config('app.date_format')),
             'updated_at' => $this->updated_at->format(config('app.date_format'))
         ];

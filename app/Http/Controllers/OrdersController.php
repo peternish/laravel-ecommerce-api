@@ -7,6 +7,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Traits\CalculateOrderValue;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,8 @@ use Illuminate\Support\Str;
 
 class OrdersController extends Controller
 {
+    use CalculateOrderValue;
+
     /**
      * Store a newly created resource in storage.
      *
@@ -84,20 +87,5 @@ class OrdersController extends Controller
             $rules['email'] = 'required|email|unique:users,email';
 
         return $rules;
-    }
-
-    /**
-     * Calculate order value.
-     *
-     * @return integer
-     */
-    private function calculateOrderValue(array $products): int
-    {
-        $value = 0;
-        foreach ($products as $productId){
-            $product = Product::FindOrFail($productId);
-            $value += $product->price;
-        }
-        return $value;
     }
 }

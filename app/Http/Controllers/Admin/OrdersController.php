@@ -8,10 +8,12 @@ use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Traits\CalculateOrderValue;
 
 class OrdersController extends Controller
 {
+    use CalculateOrderValue;
+
     /**
      * Display a listing of the resource.
      *
@@ -85,20 +87,5 @@ class OrdersController extends Controller
         return response()->json([
             'success' => true
         ]);
-    }
-
-    /**
-     * Calculate order value.
-     *
-     * @return integer
-     */
-    private function calculateOrderValue(array $products): int
-    {
-        $value = 0;
-        foreach ($products as $productId){
-            $product = Product::FindOrFail($productId);
-            $value += $product->price;
-        }
-        return $value;
     }
 }

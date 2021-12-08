@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\Helper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -17,7 +18,7 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price' => round($this->price/100, 2),
+            'price' => Helper::convertToPLN($this->price),
             'created_at' => $this->created_at->format(config('app.date_format')),
             'updated_at' => $this->updated_at->format(config('app.date_format'))
         ];
