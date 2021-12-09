@@ -25,7 +25,8 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'value' => 'required|integer|min:0',
-            'user_id' => 'required|integer|exists:users,id'
+            'user_id' => 'required|integer|exists:users,id',
+            'status' => 'required|integer|min:0|max:1'
         ];
     }
 }

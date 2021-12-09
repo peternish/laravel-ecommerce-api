@@ -8,17 +8,9 @@ trait HasLogs
 {
     public function save(array $options = [])
     {
-        Log::channel('model')->debug('BEFORE: '.$this->toJson());
+        $before = 'BEFORE: '.$this->toJson();
         $result = parent::save($options);
-        Log::channel('model')->debug('AFTER: '.$this->toJson());
-        return $result;
-    }
-
-    public function update(array $attributes = [], array $options = [])
-    {
-        Log::channel('model')->debug('BEFORE: '.$this->toJson());
-        $result = parent::update($attributes, $options);
-        Log::channel('model')->debug('AFTER: '.$this->toJson());
+        Log::channel('model')->debug($before."\tAFTER: ".$this->toJson());
         return $result;
     }
 }

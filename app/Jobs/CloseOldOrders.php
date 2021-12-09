@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CheckOrders implements ShouldQueue
+class CloseOldOrders implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,6 +31,6 @@ class CheckOrders implements ShouldQueue
      */
     public function handle()
     {
-        Order::open()->where('created_at', '<=', now()->subDays(3))->delete();
+        Order::open()->where('created_at', '<', now()->subDays(3))->update(['status' => 1]);
     }
 }

@@ -2,7 +2,8 @@
 
 namespace App\Console;
 
-use App\Jobs\CheckOrders;
+use App\Jobs\CheckOrdersPayment;
+use App\Jobs\CloseOldOrders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,7 +17,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new CheckOrders)->daily();
+        $schedule->job(new CloseOldOrders)->daily();
+
+        //For example only
+        //$schedule->job(new CheckOrdersPayment)->everyTwoHours();
     }
 
     /**
