@@ -23,7 +23,7 @@ class PublicOrdersTest extends TestCase
         $faker = $this->getFaker();
         $email = $faker->unique()->safeEmail();
 
-        $response = $this->post('/public/orders', [
+        $response = $this->postJson('/public/orders', [
             'email' => $email,
             'products' => $orderData['products']
         ]);
@@ -53,6 +53,24 @@ class PublicOrdersTest extends TestCase
     }
 
     /**
+     * Create order as guest without email.
+     *
+     * @group public_orders
+     * @return void
+     */
+    public function testCreateOrderAsGuestWithoutEmail()
+    {
+        $orderData = $this->getOrder();
+        $faker = $this->getFaker();
+
+        $response = $this->postJson('/public/orders', [
+            'products' => $orderData['products']
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    /**
      * Create order as user.
      *
      * @group public_orders
@@ -65,7 +83,7 @@ class PublicOrdersTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $response = $this->post('/public/orders', [
+        $response = $this->postJson('/public/orders', [
             'products' => $orderData['products']
         ]);
 
@@ -84,6 +102,25 @@ class PublicOrdersTest extends TestCase
         $this->assertNotEmpty($order);
         $this->assertEquals($user->id, $order->user_id);
         $this->assertEquals($orderData['value'], $order->value);
+    }
+
+    /**
+     * Create order without products.
+     *
+     * @group public_orders
+     * @return void
+     */
+    public function testCreateOrderWithoutProducts()
+    {
+        $user = $this->getRandomUser();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/public/orders', [
+            'products' => []
+        ]);
+
+        $response->assertStatus(422);
     }
 
     private function getOrder(): array

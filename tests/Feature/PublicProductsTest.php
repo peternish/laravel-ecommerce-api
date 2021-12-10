@@ -28,7 +28,7 @@ class PublicProductsTest extends TestCase
         });
     }
 
-     /**
+    /**
      * Get product.
      *
      * @group public_products
@@ -46,5 +46,18 @@ class PublicProductsTest extends TestCase
             'id' => $product->id,
             'price' => Helper::convertToPLN($product->price)
         ]);
+    }
+
+    /**
+     * Get product not found.
+     *
+     * @group public_products
+     * @return void
+     */
+    public function testProductNotFound()
+    {
+        $response = $this->get('/public/products/0');
+
+        $response->assertStatus(404);
     }
 }
