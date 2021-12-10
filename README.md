@@ -6,8 +6,8 @@ Simple Laravel Ecommerce API
 
 
 ## Endpoints list
-- /register - creates new user and returns token generated using Laravel Selenium
-- /login - returns user data and token generated using Laravel Selenium
+- /register - creates new user and returns token generated using Laravel Sanctum
+- /login - returns user data and token generated using Laravel Sanctum
 - /logout - destroys tokens
 - /public/products
 - /public/orders
